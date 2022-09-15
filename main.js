@@ -15,10 +15,10 @@ function myFunction() {
 }
 
 const drawTable = (data) => {
-  const tbody = document.getElementById("tbody");
+  const tbody = document.createElement("tbody");
+  document.getElementsByClassName("table-borderless")[0].appendChild(tbody);
 
   data.forEach((symbolData) => {
-    // console.log("here", symbolData);
     const tr = document.createElement("tr");
     tr.className = "table-primary";
 
