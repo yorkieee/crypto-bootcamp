@@ -1,35 +1,3 @@
-var data = exchange.symbols;
-console.log("data", data);
-
-var tbody = document.getElementById("tbody");
-
-for (var i = 0; i < data.length; i++) {
-  var tr = document.createElement("tr");
-
-  var td1 = document.createElement("td");
-  td1.innerHTML = data[i].baseAsset;
-
-  var td2 = document.createElement("td");
-  td1.innerHTML = data[i].quoteAsset;
-
-  var td3 = document.createElement("td");
-  td2.innerHTML = data[i].filters[0].minPrice;
-
-  var td4 = document.createElement("td");
-  td3.innerHTML = data[i].filters[0].maxPrice;
-
-  //   var td5 = document.createElement("td");
-  //   td3.innerHTML = data[i].priceChangePercent;
-
-  tr.appendChild(td1);
-  tr.appendChild(td2);
-  tr.appendChild(td3);
-  tr.appendChild(td4);
-  //   tr.appendChild(td4);
-
-  tbody.appendChild(tr);
-}
-
 function myFunction() {
   var dots = document.getElementById("dots");
   var moreText = document.getElementById("more");
@@ -45,3 +13,76 @@ function myFunction() {
     moreText.style.display = "inline";
   }
 }
+
+const drawTable = (data) => {
+  const tbody = document.getElementById("tbody");
+
+  data.forEach((symbolData) => {
+    // console.log("here", symbolData);
+    const tr = document.createElement("tr");
+    tr.className = "table-primary";
+
+    const td1 = document.createElement("td");
+    td1.innerHTML = symbolData.symbol;
+
+    const td2 = document.createElement("td");
+    td2.innerHTML = symbolData.highPrice;
+
+    const td3 = document.createElement("td");
+    td3.innerHTML = symbolData.lowPrice;
+
+    const td4 = document.createElement("td");
+    td4.innerHTML = symbolData.priceChange;
+
+    const td5 = document.createElement("td");
+    td5.innerHTML = symbolData.priceChangePercent;
+
+    tr.appendChild(td1);
+    tr.appendChild(td2);
+    tr.appendChild(td3);
+    tr.appendChild(td4);
+    tr.appendChild(td5);
+
+    tbody.appendChild(tr);
+  });
+};
+
+const clearTable = () => {
+  document.getElementById("tbody").removeChild();
+};
+
+const getPriceDataFromBinance = async (symbols) => {
+  let fetchedData;
+  const url = `https://api.binance.com/api/v3/ticker/24hr?symbols=${symbols}`;
+
+  await fetch(url).then((result) => {
+    fetchedData = result.json();
+  });
+
+  return fetchedData;
+};
+
+getPriceDataFromBinance(
+  '["BTCUSDT","BNBUSDT","ETHUSDT","ADAUSDT","SOLBTC","DOGEUSDT","ETHBTC"]'
+).then((symbolsData) => {
+  drawTable(symbolsData);
+  let filteredSymbolsData = [];
+
+  // fire on every keyboard input
+  document.querySelector("#search-text").addEventListener("input", (e) => {
+    const userInput = e.target.value;
+
+    if (userInput === "") {
+      drawTable(symbolsData);
+      return;
+    }
+
+    filteredSymbolsData = symbolsData.filter(
+      (symbolData) =>
+        symbolData.symbol.toLowerCase() === userInput.toLowerCase()
+    );
+    // console.log(filteredSymbolsData);
+    clearTable();
+    drawTable(filteredSymbolsData);
+  });
+});
