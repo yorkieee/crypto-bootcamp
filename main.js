@@ -16,6 +16,7 @@ function myFunction() {
 
 const drawTable = (data) => {
   const tbody = document.createElement("tbody");
+  tbody.id = "table-body";
   document.getElementsByClassName("table-borderless")[0].appendChild(tbody);
 
   data.forEach((symbolData) => {
@@ -48,7 +49,9 @@ const drawTable = (data) => {
 };
 
 const clearTable = () => {
-  document.getElementById("tbody").removeChild();
+  if (document.getElementById("table-body")) {
+    document.getElementById("table-body").remove();
+  }
 };
 
 const getPriceDataFromBinance = async (symbols) => {
@@ -81,7 +84,7 @@ getPriceDataFromBinance(
       (symbolData) =>
         symbolData.symbol.toLowerCase() === userInput.toLowerCase()
     );
-    // console.log(filteredSymbolsData);
+    console.log(filteredSymbolsData);
     clearTable();
     drawTable(filteredSymbolsData);
   });
