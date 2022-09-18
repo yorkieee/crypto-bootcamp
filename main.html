@@ -59,13 +59,23 @@
       <input id="search-text" type="text" placeholder="Filter cryptocurrency" />
     </div>
 
-    <div class="checkbox">
-      <label> <input type="checkbox" /> BTCUSDT </label>
-      <label> <input type="checkbox" /> ETHUSDT </label>
+    <form class="radio-filter">
+      <input class="radio" id="btc" type="radio" name="currency-filter" />
+      <label for="btc">BTC</label>
 
-      <label> <input type="checkbox" /> BNBUSDT </label>
-      <label> <input type="checkbox" /> SOLUSDT </label>
-    </div>
+      <input class="radio" id="eth" type="radio" name="currency-filter" />
+      <label for="eth">ETH</label>
+
+      <input class="radio" id="sol" type="radio" name="currency-filter" />
+      <label for="sol">SOL</label>
+    </form>
+
+    <form>
+      <select name="sorting" id="select">
+        <option value="ascending">price increasing</option>
+        <option value="descending">price decreasing</option>
+      </select>
+    </form>
 
     <table class="table table-borderless">
       <thead>

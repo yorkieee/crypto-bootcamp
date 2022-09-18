@@ -14,10 +14,18 @@ function myFunction() {
   }
 }
 
+const clearTable = () => {
+  if (document.getElementById("table-body")) {
+    document.getElementById("table-body").remove();
+  }
+};
+
 const drawTable = (data) => {
+  clearTable();
+
   const tbody = document.createElement("tbody");
   tbody.id = "table-body";
-  document.getElementsByClassName("table-borderless")[0].appendChild(tbody);
+  document.querySelector(".table-borderless").appendChild(tbody);
 
   data.forEach((symbolData) => {
     const tr = document.createElement("tr");
@@ -48,12 +56,6 @@ const drawTable = (data) => {
   });
 };
 
-const clearTable = () => {
-  if (document.getElementById("table-body")) {
-    document.getElementById("table-body").remove();
-  }
-};
-
 const getPriceDataFromBinance = async (symbols) => {
   let fetchedData;
   const url = `https://api.binance.com/api/v3/ticker/24hr?symbols=${symbols}`;
@@ -65,27 +67,94 @@ const getPriceDataFromBinance = async (symbols) => {
   return fetchedData;
 };
 
-getPriceDataFromBinance(
-  '["BTCUSDT","BNBUSDT","ETHUSDT","ADAUSDT","SOLBTC","DOGEUSDT","ETHBTC"]'
-).then((symbolsData) => {
-  drawTable(symbolsData);
+const filterAndDrawTableBySearchText = (dataToFilter) => {
   let filteredSymbolsData = [];
 
-  // fire on every keyboard input
   document.querySelector("#search-text").addEventListener("input", (e) => {
     const userInput = e.target.value;
 
     if (userInput === "") {
-      drawTable(symbolsData);
+      drawTable(dataToFilter);
+
       return;
     }
 
-    filteredSymbolsData = symbolsData.filter(
-      (symbolData) =>
-        symbolData.symbol.toLowerCase() === userInput.toLowerCase()
+    // filtering here
+    filteredSymbolsData = dataToFilter.filter((symbolData) =>
+      symbolData.symbol.toLowerCase().includes(userInput.toLowerCase())
     );
-    console.log(filteredSymbolsData);
-    clearTable();
+
     drawTable(filteredSymbolsData);
   });
+};
+
+const filterAndDrawTableByRadio = (dataToFilter) => {
+  let filteredSymbolsData = [];
+  document.querySelector(".radio-filter").addEventListener("change", (e) => {
+    const selectedValue = e.target.labels[0].innerText;
+
+    // filtering here
+    filteredSymbolsData = dataToFilter.filter((symbolData) =>
+      symbolData.symbol.toLowerCase().includes(selectedValue.toLowerCase())
+    );
+
+    drawTable(filteredSymbolsData);
+  });
+};
+
+const sorting = (data) => {
+  let sortedData = data;
+
+  document.querySelector("#select").addEventListener("change", (e) => {
+    const selectedValue = e.target.value;
+
+    // when ascending
+    if (selectedValue === "ascending") {
+      data.sort((a, b) => {
+        if (a.highPrice > b.highPrice) {
+          return 1;
+        }
+
+        if (a.highPrice < b.highPrice) {
+          return -1;
+        }
+
+        return 0;
+      });
+    }
+
+    // when descending
+    if (selectedValue === "descending") {
+      data.sort((a, b) => {
+        if (a.highPrice > b.highPrice) {
+          return -1;
+        }
+
+        if (a.highPrice < b.highPrice) {
+          return 1;
+        }
+
+        return 0;
+      });
+    }
+    sortedData = data;
+    drawTable(data);
+  });
+
+  return sortedData;
+};
+
+getPriceDataFromBinance(
+  '["BTCUSDT","BNBUSDT","ETHUSDT","ADAUSDT","SOLBTC","DOGEUSDT","ETHBTC","SOLETH"]'
+).then((symbolsData) => {
+  // draw initial table
+  drawTable(symbolsData);
+
+  const sortedData = sorting(symbolsData);
+
+  // draw table filtered by text
+  filterAndDrawTableBySearchText(sortedData);
+
+  // draw table filtered by radio
+  filterAndDrawTableByRadio(sortedData);
 });
