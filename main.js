@@ -25,7 +25,7 @@ const drawTable = (data) => {
 
   const tbody = document.createElement("tbody");
   tbody.id = "table-body";
-  document.querySelector(".table-borderless").appendChild(tbody);
+  document.querySelector(".table").appendChild(tbody);
 
   data.forEach((symbolData) => {
     const tr = document.createElement("tr");
@@ -35,16 +35,16 @@ const drawTable = (data) => {
     td1.innerHTML = symbolData.symbol;
 
     const td2 = document.createElement("td");
-    td2.innerHTML = symbolData.highPrice;
+    td2.innerHTML = symbolData.lastPrice;
 
     const td3 = document.createElement("td");
     td3.innerHTML = symbolData.lowPrice;
 
     const td4 = document.createElement("td");
-    td4.innerHTML = symbolData.priceChange;
+    td4.innerHTML = symbolData.highPrice;
 
     const td5 = document.createElement("td");
-    td5.innerHTML = symbolData.priceChangePercent;
+    td5.innerHTML = symbolData.priceChange;
 
     tr.appendChild(td1);
     tr.appendChild(td2);
@@ -67,20 +67,17 @@ const getPriceDataFromBinance = async (symbols) => {
   return fetchedData;
 };
 
-const filterAndDrawTableBySearchText = (dataToFilter) => {
-  let filteredSymbolsData = [];
-
+const filterAndDrawTableBySearchText = () => {
   document.querySelector("#search-text").addEventListener("input", (e) => {
     const userInput = e.target.value;
 
     if (userInput === "") {
-      drawTable(dataToFilter);
-
+      drawTable(originalData);
       return;
     }
 
     // filtering here
-    filteredSymbolsData = dataToFilter.filter((symbolData) =>
+    const filteredSymbolsData = tableData.filter((symbolData) =>
       symbolData.symbol.toLowerCase().includes(userInput.toLowerCase())
     );
 
@@ -88,29 +85,32 @@ const filterAndDrawTableBySearchText = (dataToFilter) => {
   });
 };
 
-const filterAndDrawTableByRadio = (dataToFilter) => {
-  let filteredSymbolsData = [];
+const filterAndDrawTableByRadio = () => {
   document.querySelector(".radio-filter").addEventListener("change", (e) => {
     const selectedValue = e.target.labels[0].innerText;
 
+    if (selectedValue.toLowerCase() === "all") {
+      drawTable(originalData);
+      return;
+    }
+
     // filtering here
-    filteredSymbolsData = dataToFilter.filter((symbolData) =>
+    const filteredSymbolsData = originalData.filter((symbolData) =>
       symbolData.symbol.toLowerCase().includes(selectedValue.toLowerCase())
     );
 
+    tableData = filteredSymbolsData;
     drawTable(filteredSymbolsData);
   });
 };
 
-const sorting = (data) => {
-  let sortedData = data;
-
+const sorting = () => {
   document.querySelector("#select").addEventListener("change", (e) => {
     const selectedValue = e.target.value;
 
     // when ascending
     if (selectedValue === "ascending") {
-      data.sort((a, b) => {
+      tableData.sort((a, b) => {
         if (a.highPrice > b.highPrice) {
           return 1;
         }
@@ -125,7 +125,7 @@ const sorting = (data) => {
 
     // when descending
     if (selectedValue === "descending") {
-      data.sort((a, b) => {
+      tableData.sort((a, b) => {
         if (a.highPrice > b.highPrice) {
           return -1;
         }
@@ -137,24 +137,24 @@ const sorting = (data) => {
         return 0;
       });
     }
-    sortedData = data;
-    drawTable(data);
+    drawTable(tableData);
   });
-
-  return sortedData;
 };
+
+let tableData; // this is it
+let originalData;
 
 getPriceDataFromBinance(
   '["BTCUSDT","BNBUSDT","ETHUSDT","ADAUSDT","SOLBTC","DOGEUSDT","ETHBTC","SOLETH"]'
-).then((symbolsData) => {
-  // draw initial table
-  drawTable(symbolsData);
+).then((binanceData) => {
+  tableData = binanceData;
+  originalData = binanceData;
 
-  const sortedData = sorting(symbolsData);
+  drawTable(tableData);
 
-  // draw table filtered by text
-  filterAndDrawTableBySearchText(sortedData);
+  sorting();
 
-  // draw table filtered by radio
-  filterAndDrawTableByRadio(sortedData);
+  filterAndDrawTableBySearchText();
+
+  filterAndDrawTableByRadio();
 });
