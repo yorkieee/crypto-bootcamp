@@ -5,6 +5,21 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="main.css" />
+    <!-- Latest compiled and minified CSS -->
+    <!-- <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css"
+      integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu"
+      crossorigin="anonymous"
+    /> -->
+    <!-- CSS only -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT"
+      crossorigin="anonymous"
+    />
+
     <title>home</title>
   </head>
 
@@ -33,13 +48,10 @@
             FOR FREE
             <span id="dots">...</span>
             <span id="more"
-              >erisque enim ligula venenatis dolor. Maecenas nisl est, ultrices
-              nec congue eget, auctor vitae massa. Fusce luctus vestibulum augue
-              ut aliquet. Nunc sagittis dictum nisi, sed ullamcorper ipsum
-              dignissim ac. In at libero sed nunc venenatis imperdiet sed ornare
-              turpis. Donec vitae dui eget tellus gravida venenatis. Integer
-              fringilla congue eros non fermentum. Sed dapibus pulvinar nibh
-              tempor porta.</span
+              >Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa,
+              soluta tenetur adipisci incidunt magnam sapiente explicabo
+              quibusdam amet ex laborum in itaque, quasi dicta excepturi ducimus
+              exercitationem perferendis corrupti officiis?</span
             >
           </p>
           <button onclick="myFunction()" id="myBtn" class="myBtn">
@@ -53,41 +65,75 @@
       </div>
     </section>
 
-    <p>Check the cryptocurrency trade</p>
+    <div class="tablebox">
+      <div class="joinedfilters">
+        <div class="filters">
+          <form class="radio-filter">
+            <div id="radio-label-group">
+              <input
+                class="radio"
+                id="all"
+                type="radio"
+                name="currency-filter"
+              />
+              <label for="all">All</label>
+            </div>
 
-    <div class="search-wrapper">
-      <input id="search-text" type="text" placeholder="Filter cryptocurrency" />
+            <div id="radio-label-group">
+              <input
+                class="radio"
+                id="btc"
+                type="radio"
+                name="currency-filter"
+              />
+              <label for="btc">BTC<i class="fa-brands fa-btc"></i></label>
+            </div>
+
+            <div id="radio-label-group">
+              <input
+                class="radio"
+                id="eth"
+                type="radio"
+                name="currency-filter"
+              />
+              <label for="eth">ETH</label>
+            </div>
+
+            <div id="radio-label-group">
+              <input
+                class="radio"
+                id="sol"
+                type="radio"
+                name="currency-filter"
+              />
+              <label for="sol">SOL</label>
+            </div>
+          </form>
+
+          <form class="dropdown">
+            <select name="sorting" id="select">
+              <option disabled selected>Price sorting</option>
+              <option value="ascending">Price increasing</option>
+              <option value="descending">Price decreasing</option>
+            </select>
+          </form>
+        </div>
+
+        <div class="search-wrapper">
+          <input id="search-text" type="text" placeholder="Search coin name" />
+        </div>
+      </div>
+
+      <table class="table table-striped table-hover">
+        <thead>
+          <td>Exchange</td>
+          <td>Current Price</td>
+          <td>Minimum Price</td>
+          <td>Max Price</td>
+          <td>Price Difference 24h</td>
+        </thead>
+      </table>
     </div>
-
-    <form class="radio-filter">
-      <input class="radio" id="btc" type="radio" name="currency-filter" />
-      <label for="btc">BTC</label>
-
-      <input class="radio" id="eth" type="radio" name="currency-filter" />
-      <label for="eth">ETH</label>
-
-      <input class="radio" id="sol" type="radio" name="currency-filter" />
-      <label for="sol">SOL</label>
-    </form>
-
-    <form>
-      <select name="sorting" id="select">
-        <option value="ascending">price increasing</option>
-        <option value="descending">price decreasing</option>
-      </select>
-    </form>
-
-    <table class="table table-borderless">
-      <thead>
-        <td>Exchange</td>
-        <td>Current Price</td>
-        <td>Minimum Price</td>
-        <td>Max Price</td>
-        <td>Price Difference 24h</td>
-      </thead>
-
-      <!-- <tbody id="tbody"></tbody> -->
-    </table>
 
     <footer class="footer">
       <div class="navigation">
@@ -121,13 +167,6 @@
       </div>
     </footer>
 
-    <script src="exchangeInfo.js"></script>
     <script src="main.js"></script>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx"
-      crossorigin="anonymous"
-    />
   </body>
 </html>

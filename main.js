@@ -29,7 +29,7 @@ const drawTable = (data) => {
 
   data.forEach((symbolData) => {
     const tr = document.createElement("tr");
-    tr.className = "table-primary";
+    // tr.className = "table-primary";
 
     const td1 = document.createElement("td");
     td1.innerHTML = symbolData.symbol;
@@ -77,7 +77,7 @@ const filterAndDrawTableBySearchText = () => {
     }
 
     // filtering here
-    const filteredSymbolsData = tableData.filter((symbolData) =>
+    const filteredSymbolsData = originalData.filter((symbolData) =>
       symbolData.symbol.toLowerCase().includes(userInput.toLowerCase())
     );
 
@@ -99,7 +99,7 @@ const filterAndDrawTableByRadio = () => {
       symbolData.symbol.toLowerCase().includes(selectedValue.toLowerCase())
     );
 
-    tableData = filteredSymbolsData;
+    filteredData = filteredSymbolsData;
     drawTable(filteredSymbolsData);
   });
 };
@@ -110,7 +110,7 @@ const sorting = () => {
 
     // when ascending
     if (selectedValue === "ascending") {
-      tableData.sort((a, b) => {
+      filteredData.sort((a, b) => {
         if (a.highPrice > b.highPrice) {
           return 1;
         }
@@ -125,7 +125,7 @@ const sorting = () => {
 
     // when descending
     if (selectedValue === "descending") {
-      tableData.sort((a, b) => {
+      filteredData.sort((a, b) => {
         if (a.highPrice > b.highPrice) {
           return -1;
         }
@@ -137,20 +137,21 @@ const sorting = () => {
         return 0;
       });
     }
-    drawTable(tableData);
+    drawTable(filteredData);
   });
 };
 
-let tableData; // this is it
+/// main program
+let filteredData;
 let originalData;
 
 getPriceDataFromBinance(
   '["BTCUSDT","BNBUSDT","ETHUSDT","ADAUSDT","SOLBTC","DOGEUSDT","ETHBTC","SOLETH"]'
 ).then((binanceData) => {
-  tableData = binanceData;
+  filteredData = binanceData;
   originalData = binanceData;
 
-  drawTable(tableData);
+  drawTable(originalData);
 
   sorting();
 
